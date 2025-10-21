@@ -45,8 +45,8 @@ body {
 }
       </style>
     <div id="floating-panel">
-      <button id="toggle-heatmap">Rest Areas</button>
-      <button id="toggle-heatmap2">McDonalds</button>
+      <button id="toggle-heatmap">Fly Fishing Shops</button>
+      <button id="toggle-heatmap2">MT State Parks</button>
     
     </div>
     <div id="map"></div>
@@ -280,7 +280,11 @@ shops.forEach(shop => {
         marker.addListener('click', ({ domEvent, latLng }) => {
             const { target } = domEvent;
             infoWindow.close();
-            infoWindow.setContent(marker.title);
+             infoWindow.setContent(`
+             <strong> Location: ${shop.name}</strong><br>
+             <strong> Latitude: </strong> ${shop.lat}<br>
+             <strong> Longitude: </strong> ${shop.lon}
+        `   );
             infoWindow.open(marker.map, marker);
         });
 });
@@ -303,7 +307,11 @@ parks.forEach(park => {
        marker.addListener('click', ({ domEvent, latLng }) => {
             const { target } = domEvent;
             infoWindow.close();
-            infoWindow.setContent(marker.title);
+             infoWindow.setContent(`
+              <strong>Location: ${park.name}</strong><br>
+              <strong>Latitude: </strong> ${park.lat}<br>
+              <strong>Longitude: </strong> ${park.lon}
+        `   );
             infoWindow.open(marker.map, marker);
         });
 });
