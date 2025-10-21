@@ -4,7 +4,7 @@
     <title>Dixon Mid-Term: Relationship btwn MT State Parks & Fishing Stores</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <link rel="stylesheet" type="text/css" href="./style.css" />
-    <script src="./var.js"></script>
+    <script src="./index.js"></script>
   </head>
   <body>
       <style>
@@ -53,9 +53,157 @@ body {
     <script>
 let map, heatmap;
 
+var shops= [
+{name:"Anderson's Yellowstone Angler", lat: 45.634898,lon:-110.575452},
+{name:"Anglers Roost", lat: 46.19946,lon:-114.166887},
+{name:"Arends Flies", lat: 48.34152,lon:-114.209891},
+{name:"Arricks Fly Shop", lat: 44.659883,lon:-111.099544},
+{name:"BackCountry Angler", lat: 45.212403,lon:-112.637603},
+{name:"Beartooth Fly Fishing", lat: 45.0718707,lon:-111.6459728},
+{name:"Big Bear Sports Centers", lat: 45.754987,lon:-108.580515},
+{name:"Big Sky Fly Fishers", lat: 45.794291,lon:-108.582126},
+{name:"Bighorn Fly & Tackle Shop", lat: 45.760884,lon:-108.576049},
+{name:"Bitterroot Fly Company", lat: 46.028832,lon:-114.177571},
+{name:"Blackfoot Angler", lat: 47.803476,lon:-103.283224},
+{name:"Blue Ribbon Fishing Tours", lat: 45.670403,lon:-110.563196},
+{name:"Blue Ribbon Flies", lat: 44.664143,lon:-111.09952},
+{name:"Bob Ward & Sons", lat: 45.710549,lon:-111.069231},
+{name:"Brady's Sportsman Surplus", lat: 46.849604,lon:-114.017123},
+{name:"Brant Oswald Fishing Service", lat: 45.656274,lon:-110.568622},
+{name:"Bud Lilly's Trout Shop", lat: 44.660631,lon:-111.098299},
+{name:"Castle Mt Sports", lat: 46.548331,lon:-110.90528},
+{name:"Conover's Trading Post", lat: 45.617779,lon:-113.450117},
+{name:"Craig Fellin Outfitters", lat: 45.769444,lon:-113.040637},
+{name:"Cross Currents", lat: 46.589216,lon:-112.037742},
+{name:"Cross Currents", lat: 47.074729,lon:-111.965067},
+{name:"Dan Bailey's Fly Shop", lat: 45.661588,lon:-110.562371},
+{name:"Dave Blackburn's Kootenai Angler", lat: 48.393297,lon:-115.550734},
+{name:"Eagle's Store", lat: 44.658946,lon:-111.099544},
+{name:"East Slope Outfitters", lat: 45.830817,lon:-108.473929},
+{name:"Fins & Feathers", lat: 45.669901,lon:-111.185837},
+{name:"Fishaus Fly Fishing", lat: 46.253501,lon:-114.156378},
+{name:"Five Rivers Lodge", lat: 45.369205,lon:-112.468636},
+{name:"Flint Creek Outdoors", lat: 46.332149,lon:-113.294744},
+{name:"Fly Fisher's Inn", lat: 47.163247,lon:-111.823969},
+{name:"Fly Fishing Always", lat: 46.240338,lon:-114.159028},
+{name:"Four Rivers Fishing Co", lat: 45.543227,lon:-112.330779},
+{name:"Frontier Anglers", lat: 45.227432,lon:-112.628496},
+{name:"Great Divide Outfitters", lat: 45.763773,lon:-112.791055},
+{name:"Greater Yellowstone FlyFishers", lat: 45.673402,lon:-111.184815},
+{name:"Grizzly Hackle Fly Shop", lat: 46.87081,lon:-113.997069},
+{name:"Hatch Finders Fly Shop", lat: 45.662196,lon:-110.561271},
+{name:"Hubbard's Yellowstone Lodge", lat: 45.191685,lon:-110.91881},
+{name:"Jacklin's Fly Shop", lat: 44.658909,lon:-111.1001936},
+{name:"Kesel's Four Rivers Fly Shop", lat: 46.866647,lon:-113.997462},
+{name:"Kootenia River Outfitters", lat: 48.475545,lon:-115.901319},
+{name:"Lakestream Fly Fishing Shop", lat: 48.40921,lon:-114.336914},
+{name:"Madison River Fishing Company", lat: 45.348689,lon:-111.729989},
+{name:"Madison River Outfitters", lat: 44.661093,lon:-111.099544},
+{name:"Missoulian Angler Fly Shop", lat: 46.867844,lon:-114.003585},
+{name:"Missouri Riverside Outfitters", lat: 47.129402,lon:-111.869931},
+{name:"Montana Fly Company", lat: 48.373846,lon:-114.182669},
+{name:"Montana Fly Goods", lat: 46.60651,lon:-112.067541},
+{name:"Montana River Outfitters", lat: 47.004349,lon:-112.070249},
+{name:"Montana River Outfitters", lat: 47.516439,lon:-111.291552},
+{name:"Montana Trout Wranglers ", lat: 45.780824,lon:-111.183278},
+{name:"Montana Troutfitters", lat: 45.679181,lon:-111.059945},
+{name:"Northern Rockies Outfitters", lat: 48.285423,lon:-114.227115},
+{name:"Odell Creek Fly Shop", lat: 45.339814,lon:-111.710951},
+{name:"Parks Fly Shop", lat: 45.030948,lon:-110.705327},
+{name:"Prewett Creek Inn", lat: 47.172738,lon:-111.830749},
+{name:"Rainbow Run Fly Shop", lat: 45.783983,lon:-108.573109},
+{name:"Red Rock Sporting Goods", lat: 46.401955,lon:-105.82244},
+{name:"River Otter Fly Shop", lat: 46.688462,lon:-114.077487},
+{name:"Riverbend FlyFishers", lat: 46.245952,lon:-114.155699},
+{name:"Rock Creek Mercantile", lat: 46.717181,lon:-113.668314},
+{name:"Ronan Sports & Western", lat: 47.537775,lon:-114.102104},
+{name:"Schnee's Powderhorn Outfitters", lat: 45.669025,lon:-111.157437},
+{name:"Slide Inn", lat: 44.8288478,lon:-111.4659119},
+{name:"Slough Creek Outfitters", lat: 45.542353,lon:-110.5395},
+{name:"Snappy Sport Senter", lat: 48.442765,lon:-114.041907},
+{name:"Straub's Montana Fishing Outfitters", lat: 46.596219,lon:-112.056319},
+{name:"Stumptown Anglers", lat: 48.37034,lon:-114.335794},
+{name:"Sunrise Fly Shop", lat: 45.632644,lon:-112.684715},
+{name:"The Bozeman Angler", lat: 45.679437,lon:-111.036802},
+{name:"The Complete Fly Fishers", lat: 45.784758,lon:-112.915775},
+{name:"The Kingfisher FlyShop", lat: 46.870804,lon:-113.989226},
+{name:"The Powderhorn", lat: 45.679438,lon:-111.036657},
+{name:"The River's Edge", lat: 45.699164,lon:-111.046094},
+{name:"The StoneFly Fly Shop", lat: 45.98654,lon:-112.50567},
+{name:"The Stonefly Inn", lat: 45.53975,lon:-112.330939},
+{name:"The Tackle Shop", lat: 45.348684,lon:-111.729752},
+{name:"The Trout Shop", lat: 47.074662,lon:-111.963537},
+{name:"Tom Jenni's Reel Montana", lat: 45.67409,lon:-111.056074},
+{name:"Triple Creek Ranch", lat: 45.874779,lon:-114.196577},
+{name:"Troutfitters", lat: 45.812504,lon:-113.007605},
+{name:"Two Rivers Gear & Outfitters", lat: 48.062958,lon:-114.073081},
+{name:"Uncle Bob's Outdoors", lat: 45.2359,lon:-112.602139},
+{name:"Wade Lake Resort", lat: 44.806637,lon:-111.526687},
+{name:"Westfork Cabins", lat: 44.93381,lon:-111.605307},
+{name:"Yellowstone Troutfitters", lat: 45.190014,lon:-109.246953},
+{name:"East Rosebud Fly & Tackle", lat: 45.7779452,lon:-108.5765029},
+{name:"Sweetwater Fly Shop", lat: 45.6709591,lon:-110.5453361}
+]
+
+var parks= [
+{name:"Ackley Lake State Park", lat: 46.95795,lon:-109.9409},
+{name:"Anaconda Smelter Stack State Park", lat: 46.12319,lon:-112.93143},
+{name:"Bannack State Park", lat: 45.16212,lon:-112.99868},
+{name:"Beaverhead Rock State Park", lat: 45.38333,lon:-112.4609},
+{name:"Beavertail Hill State Park", lat: 46.72047,lon:-113.57628},
+{name:"Big Arm State Park", lat: 47.80534,lon:-114.31339},
+{name:"Black Sandy State Park", lat: 46.74553,lon:-111.88621},
+{name:"Brush Lake State Park", lat: 48.603,lon:-104.113},
+{name:"Chief Plenty Coups State Park", lat: 45.427,lon:-108.549},
+{name:"Clark's Lookout State Park", lat: 45.235,lon:-112.634},
+{name:"Cooney State Park", lat: 45.442,lon:-109.205},
+{name:"Council Grove State Park", lat: 46.91302,lon:-114.15477},
+{name:"Elkhorn State Park", lat: 46.27514,lon:-111.94619},
+{name:"Finley Point State Park", lat: 47.75536,lon:-114.08237},
+{name:"First Peoples Buffalo Jump State Park", lat: 47.479,lon:-111.525},
+{name:"Fish Creek State Park", lat: 46.99,lon:-114.716},
+{name:"Fort Owen State Park", lat: 46.51948,lon:-114.09705},
+{name:"Frenchtown Pond State Park", lat: 47.02443,lon:-114.25776},
+{name:"Giant Springs State Park", lat: 47.534,lon:-111.227},
+{name:"Granite Ghost Town State Park", lat: 46.31689,lon:-113.24644},
+{name:"Greycliff Prairie Dog Town State Park", lat: 45.761604,lon:-109.789629},
+{name:"Hell Creek State Park", lat: 47.615,lon:-106.886},
+{name:"Lake Elmo State Park", lat: 45.839,lon:-108.477},
+{name:"Lake Mary Ronan State Park", lat: 47.92738,lon:-114.38229},
+{name:"Les Mason State Park", lat: 48.45894,lon:-114.37171},
+{name:"Lewis and Clark Caverns State Park", lat: 45.82289,lon:-111.85082},
+{name:"Logan State Park", lat: 48.03302,lon:-115.06627},
+{name:"Lone Pine State Park", lat: 48.17404,lon:-114.33754},
+{name:"Lost Creek State Park", lat: 46.19778,lon:-112.98247},
+{name:"Madison Buffalo Jump State Park", lat: 45.79431,lon:-111.47197},
+{name:"Makoshika State Park", lat: 47.08972,lon:-104.70633},
+{name:"Medicine Rocks State Park", lat: 46.0455,lon:-104.45839},
+{name:"Missouri Headwaters State Park", lat: 45.92013,lon:-111.49989},
+{name:"Painted Rocks State Park", lat: 45.68128,lon:-114.301},
+{name:"Pictograph Cave State Park", lat: 45.738,lon:-108.433},
+{name:"Pirogue Island State Park", lat: 46.44181,lon:-105.82253},
+{name:"Placid Lake State Park", lat: 47.11929,lon:-113.50335},
+{name:"Rosebud Battlefield State Park", lat: 45.21944,lon:-106.97829},
+{name:"Salmon Lake State Park", lat: 47.09442,lon:-113.39791},
+{name:"Sluice Boxes State Park", lat: 47.212,lon:-110.935},
+{name:"Smith River State Park", lat: 46.803,lon:-111.182},
+{name:"Spring Meadow Lake State Park", lat: 46.61224,lon:-112.07574},
+{name:"Thompson Falls State Park", lat: 47.61625,lon:-115.38676},
+{name:"Tongue River Reservoir State Park", lat: 45.09975,lon:-106.79453},
+{name:"Tower Rock State Park", lat: 47.189,lon:-111.81},
+{name:"Travelers' Rest State Park", lat: 46.75306,lon:-114.09007},
+{name:"Wayfarers State Park", lat: 48.0548,lon:-114.07543},
+{name:"West Shore State Park", lat: 47.949392,lon:-114.1884523},
+{name:"Whitefish Lake State Park", lat: 48.42381,lon:-114.37067},
+{name:"Wild Horse Island State Park", lat: 47.84715,lon:-114.23458},
+{name:"Yellow Bay State Park", lat: 47.87643,lon:-114.02854}
+]
+
 
 async function initMap() {
-    const { Map } = await google.maps.importLibrary("maps");
+    const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+    
     
     const myLatlng = { lat: 41.3114, lng: -105.5911  };
 
@@ -65,6 +213,8 @@ async function initMap() {
       center: myLatlng,
       mapId: "b32214384eb9038e3dc05024",
     });
+
+  const infoWindow = new InfoWindow();
 
   heatmap = new google.maps.visualization.HeatmapLayer({
     data: getPoints(),
@@ -112,11 +262,57 @@ function getPoints2() {
   return points
 }
 
+shops.forEach(shop => {
+    const pinBackground = new google.maps.marker.PinElement({
+        background: '#4285F4', 
+        borderColor: '#3367D6',
+        glyphColor: 'white',
+        scale:0.6
+    });
+    
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+        map: map,
+        position: { lat: shop.lat, lng: shop.lon },
+        title: shop.name,
+        content: pinBackground.element,
+        gmpClickable: true
+    });
+        marker.addListener('click', ({ domEvent, latLng }) => {
+            const { target } = domEvent;
+            infoWindow.close();
+            infoWindow.setContent(marker.title);
+            infoWindow.open(marker.map, marker);
+        });
+});
+
+parks.forEach(park => {
+    const pinBackground = new google.maps.marker.PinElement({
+        background: '#34A853', 
+        borderColor: '#2E8B47',
+        glyphColor: 'white',
+        scale:0.6
+    });
+    
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+        map: map,
+        position: { lat: park.lat, lng: park.lon },
+        title: park.name,
+        content: pinBackground.element,
+        gmpClickable: true
+    });
+       marker.addListener('click', ({ domEvent, latLng }) => {
+            const { target } = domEvent;
+            infoWindow.close();
+            infoWindow.setContent(marker.title);
+            infoWindow.open(marker.map, marker);
+        });
+});
+
 }
 
     </script>
   <script async
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhPYJe3Dh4o4paG0YBpiI1rxY9MnSwILM&loading=async&libraries=visualization&callback=initMap">
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhPYJe3Dh4o4paG0YBpiI1rxY9MnSwILM&loading=async&libraries=visualization,marker&callback=initMap">
 </script>
 
   </body>
