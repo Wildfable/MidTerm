@@ -43,15 +43,34 @@ body {
   top: 10px;
   z-index: 5;
 }
+
+#legend {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: white;
+  padding: 10px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  z-index: 5;
+}
+    
       </style>
     <div id="floating-panel">
-      <button id="toggle-heatmap">Fly Fishing Shops</button>
-      <button id="toggle-heatmap2">MT State Parks</button>
-    
+      <button id="shopBuffer">Fly Fishing Shops</button>
+      <button id="parkBuffer">MT State Parks</button>
     </div>
+    <div id="legend">
+      <h4 style="margin: 0 0 8px 0;">Buffer Zones (15 miles) Around Each Point <br>
+      Click the toggle switch at the top to activate the 15 mi buffer around each point.</h4>
+    </div>
+</div>
+
     <div id="map"></div>
     <script>
-let map, heatmap;
+let map;
 
 var shops= [
 {name:"Anderson's Yellowstone Angler", lat: 45.634898,lon:-110.575452},
@@ -216,51 +235,53 @@ async function initMap() {
 
   const infoWindow = new InfoWindow();
 
-  heatmap = new google.maps.visualization.HeatmapLayer({
-    data: getPoints(),
-    map: map,
-  });
-  var heatmap2 =  new google.maps.visualization.HeatmapLayer({
-    data: getPoints2(),
-    map: map,
-    gradient: ["rgba(0, 255, 255, 0)",
-    "rgba(0, 255, 255, 1)",
-    "rgba(0, 191, 255, 1)",
-    "rgba(0, 127, 255, 1)",
-    "rgba(0, 63, 255, 1)",
-    "rgba(0, 0, 255, 1)",
-    "rgba(0, 0, 223, 1)",
-    "rgba(0, 0, 191, 1)",
-    "rgba(0, 0, 159, 1)",
-    "rgba(0, 0, 127, 1)",
-    "rgba(63, 0, 91, 1)",
-    "rgba(127, 0, 63, 1)",
-    "rgba(191, 0, 31, 1)",
-    "rgba(255, 0, 0, 1)",]
-  });
-  document.getElementById("toggle-heatmap").addEventListener("click", toggleHeatmap);
-  document.getElementById("toggle-heatmap2").addEventListener("click", toggleHeatmap2);
+  let shopBuffer = [];
+  let parkBuffer = [];
 
-function toggleHeatmap() {
-  heatmap.setMap(heatmap.getMap() ? null : map);
+    
+    shops.forEach(shop => {
+        const buffer = new google.maps.Circle({
+            map: null,
+            center: { lat: shop.lat, lng: shop.lon },
+            radius: 24140, 
+            fillColor: '#4285F4',
+            fillOpacity: 0.2,
+            strokeColor: '#3367D6',
+            strokeOpacity: 0.6,
+            strokeWeight: 1
+        });
+        shopBuffer.push(buffer);
+    });
+
+    
+    parks.forEach(park => {
+        const buffer = new google.maps.Circle({
+            map: null, 
+            center: { lat: park.lat, lng: park.lon },
+            radius: 24140, 
+            fillColor: '#34A853',
+            fillOpacity: 0.2,
+            strokeColor: '#2E8B47',
+            strokeOpacity: 0.6,
+            strokeWeight: 1
+        });
+        parkBuffer.push(buffer);
+    });
+  document.getElementById("shopBuffer").addEventListener("click", toggleBuffer);
+  document.getElementById("parkBuffer").addEventListener("click", toggleBuffer2);
+
+function toggleBuffer() {
+    shopBuffer.forEach(buffer => {
+        buffer.setMap(buffer.getMap() ? null : map);
+    });
 }
-function toggleHeatmap2() {
-  heatmap2.setMap(heatmap2.getMap() ? null : map);
+
+function toggleBuffer2() {
+    parkBuffer.forEach(buffer => {
+        buffer.setMap(buffer.getMap() ? null : map);
+    });
 }
-function getPoints() {
-    var points = []
-    for(var i=0; i<shops.length; i++){
-        points.push(new google.maps.LatLng(shops[i].lat, shops[i].lon))
-    }
-  return points
-}
-function getPoints2() {
-    var points = []
-    for(var i=0; i<parks.length; i++){
-        points.push(new google.maps.LatLng(parks[i].lat, parks[i].lon))
-    }
-  return points
-}
+
 
 shops.forEach(shop => {
     const pinBackground = new google.maps.marker.PinElement({
