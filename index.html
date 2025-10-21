@@ -63,8 +63,8 @@ body {
       <button id="parkBuffer">MT State Parks</button>
     </div>
     <div id="legend">
-      <h4 style="margin: 0 0 8px 0;">Buffer Zones (15 miles) Around Each Point <br>
-      Click the toggle switch at the top to activate the 15 mi buffer around each point.</h4>
+      <h4 style="margin: 0 0 8px 0;">Buffer Zones (20 miles) Around Each Point <br>
+      Click the toggle switch at the top to activate the 20 mi buffer around each point.</h4>
     </div>
 </div>
 
@@ -243,7 +243,7 @@ async function initMap() {
         const buffer = new google.maps.Circle({
             map: null,
             center: { lat: shop.lat, lng: shop.lon },
-            radius: 24140, 
+            radius: 32186.8, 
             fillColor: '#4285F4',
             fillOpacity: 0.2,
             strokeColor: '#3367D6',
@@ -258,7 +258,7 @@ async function initMap() {
         const buffer = new google.maps.Circle({
             map: null, 
             center: { lat: park.lat, lng: park.lon },
-            radius: 24140, 
+            radius: 32186.8, 
             fillColor: '#34A853',
             fillOpacity: 0.2,
             strokeColor: '#2E8B47',
